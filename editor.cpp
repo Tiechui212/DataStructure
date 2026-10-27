@@ -6,32 +6,32 @@
 
 bool addPaperInteractive() {
     if (g_papers.length >= MAX_PAPERS) {
-        std::cout << "ÂÛÎÄÊýÁ¿ÒÑ´ïÉÏÏÞ£¬ÎÞ·¨Ìí¼Ó¡£\n";
+        std::cout << "è®ºæ–‡æ•°é‡å·²è¾¾ä¸Šé™ï¼Œæ— æ³•æ·»åŠ ã€‚\n";
         return false;
     }
 
     Paper newPaper = {};
 
-    std::cout << "ÇëÊäÈëÂÛÎÄID£º";
+    std::cout << "è¯·è¾“å…¥è®ºæ–‡IDï¼š";
     std::cin >> newPaper.id;
     std::cin.ignore();
 
     for (int i = 0; i < g_papers.length; ++i) {
         if (g_papers.data[i].id == newPaper.id) {
-            std::cout << "ÂÛÎÄIDÒÑ´æÔÚ£¬Ìí¼ÓÊ§°Ü¡£\n";
+            std::cout << "è®ºæ–‡IDå·²å­˜åœ¨ï¼Œæ·»åŠ å¤±è´¥ã€‚\n";
             return false;
         }
     }
 
     std::string input;
 
-    std::cout << "ÇëÊäÈë±êÌâ£º";
+    std::cout << "è¯·è¾“å…¥æ ‡é¢˜ï¼š";
     std::getline(std::cin, input);
     std::strncpy(newPaper.title, input.c_str(),
                  sizeof(newPaper.title) - 1);
     newPaper.title[sizeof(newPaper.title) - 1] = '\0';
 
-    std::cout << "ÇëÊäÈë×÷Õß£¨¶à¸ö×÷ÕßÓÃ;·Ö¸ô£©£º";
+    std::cout << "è¯·è¾“å…¥ä½œè€…ï¼ˆå¤šä¸ªä½œè€…ç”¨;åˆ†éš”ï¼‰ï¼š";
     std::getline(std::cin, input);
     std::strncpy(newPaper.authors, input.c_str(),
                  sizeof(newPaper.authors) - 1);
@@ -39,8 +39,8 @@ bool addPaperInteractive() {
 
     newPaper.keywordCount = 0;
     for (int i = 0; i < MAX_KEYWORDS; ++i) {
-        std::cout << "ÇëÊäÈëµÚ" << i + 1
-                  << "¸ö¹Ø¼ü´Ê£¨²»ÐèÒªÇëÖ±½Ó»Ø³µ£©£º";
+        std::cout << "è¯·è¾“å…¥ç¬¬" << i + 1
+                  << "ä¸ªå…³é”®è¯ï¼ˆä¸éœ€è¦è¯·ç›´æŽ¥å›žè½¦ï¼‰ï¼š";
         std::getline(std::cin, input);
 
         std::strncpy(newPaper.keywords[i], input.c_str(),
@@ -52,15 +52,15 @@ bool addPaperInteractive() {
         }
     }
 
-    std::cout << "ÇëÊäÈë·¢±íÄê·Ý£º";
+    std::cout << "è¯·è¾“å…¥å‘è¡¨å¹´ä»½ï¼š";
     std::cin >> newPaper.year;
     std::cin.ignore();
 
-    std::cout << "ÇëÊäÈëÒýÓÃ´ÎÊý£º";
+    std::cout << "è¯·è¾“å…¥å¼•ç”¨æ¬¡æ•°ï¼š";
     std::cin >> newPaper.citations;
     std::cin.ignore();
 
-    std::cout << "ÇëÊäÈëÕªÒªÆ¬¶Î£º";
+    std::cout << "è¯·è¾“å…¥æ‘˜è¦ç‰‡æ®µï¼š";
     std::getline(std::cin, input);
     std::strncpy(newPaper.abstractSnippet, input.c_str(),
                  sizeof(newPaper.abstractSnippet) - 1);
@@ -69,7 +69,7 @@ bool addPaperInteractive() {
     g_papers.data[g_papers.length] = newPaper;
     ++g_papers.length;
 
-    std::cout << "ÂÛÎÄÌí¼Ó³É¹¦¡£\n";
+    std::cout << "è®ºæ–‡æ·»åŠ æˆåŠŸã€‚\n";
     return true;
 }
 
@@ -84,7 +84,7 @@ bool deletePaperById(int id) {
     }
 
     if (pos == -1) {
-        std::cout << "Î´ÕÒµ½Ö¸¶¨IDµÄÂÛÎÄ£¬É¾³ýÊ§°Ü¡£\n";
+        std::cout << "æœªæ‰¾åˆ°æŒ‡å®šIDçš„è®ºæ–‡ï¼Œåˆ é™¤å¤±è´¥ã€‚\n";
         return false;
     }
 
@@ -94,6 +94,6 @@ bool deletePaperById(int id) {
 
     --g_papers.length;
 
-    std::cout << "ÂÛÎÄÉ¾³ý³É¹¦¡£\n";
+    std::cout << "è®ºæ–‡åˆ é™¤æˆåŠŸã€‚\n";
     return true;
 }

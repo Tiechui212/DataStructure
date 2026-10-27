@@ -4,6 +4,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -122,7 +123,9 @@ bool loadPapers(const std::string& filename) {
         header.pop_back();
     }
 
-    PaperList loaded;
+    // PaperList 的固定数组约占数 MB。放在堆上可避免 Windows 默认线程栈
+    // 较小时发生栈溢出，同时仍能保证完整解析成功后再替换全局数据。
+    std::unique_ptr<PaperList> loaded(new PaperList);
     std::string line;
     int lineNumber = 1;
 
@@ -136,7 +139,7 @@ bool loadPapers(const std::string& filename) {
             continue;
         }
 
-        if (loaded.length >= MAX_PAPERS) {
+        if (loaded->length >= MAX_PAPERS) {
             std::cerr << "加载失败：论文数量超过上限 " << MAX_PAPERS << "。\n";
             return false;
         }
@@ -148,8 +151,8 @@ bool loadPapers(const std::string& filename) {
             return false;
         }
 
-        loaded.data[loaded.length] = paper;
-        ++loaded.length;
+        loaded->data[loaded->length] = paper;
+        ++loaded->length;
     }
 
     if (input.bad()) {
@@ -158,7 +161,7 @@ bool loadPapers(const std::string& filename) {
     }
 
     // 仅在整份文件全部解析成功后替换全局数据，避免失败时留下半份数据。
-    g_papers = loaded;
+    g_papers = *loaded;
     std::cout << "成功加载 " << g_papers.length << " 条论文记录。\n";
     return true;
 }
