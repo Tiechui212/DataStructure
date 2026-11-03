@@ -1,11 +1,14 @@
 #include <iostream>
 #include <string>
 #include <limits> // For numeric_limits
+#include <sstream>
 
 #include "editor.h"
 #include "loader.h"
 #include "paper.h"
 #include "storage.h"
+#include "hash.h"
+#include "search_service.h"
 
 
 //使用模块化编程的思想，每个功能都应被视为一个独立的模块，
@@ -47,6 +50,7 @@ int main() {//主函数中可以自由添加局部变量、交互输入信息
 
         // --- 输入验证和错误处理 ---
         if (std::cin.fail()) { // 如果输入失败（例如输入了非数字字符）
+            if (std::cin.eof()) return 0;
             std::cout << "无效的输入，请输入一个数字选项。" << std::endl;
             std::cin.clear(); // 清除错误标志
             // 忽略并丢弃当前行中所有剩余的无效输入，直到遇到换行符
@@ -59,6 +63,7 @@ int main() {//主函数中可以自由添加局部变量、交互输入信息
         switch (choice) {
             case 1: { // 加载论文数据，数据文件名默认为 papers.txt
                 if (loadPapers("papers.txt")) {
+                    rebuildSearchIndexes();
                     dataLoaded = true; // 仅在加载成功后设置标志
                     std::cout << "论文数据加载成功！当前共有 "
                               << g_papers.length << " 篇论文。" << std::endl;
@@ -79,6 +84,7 @@ int main() {//主函数中可以自由添加局部变量、交互输入信息
             case 3: { // 添加新论文
                 if (dataLoaded) {
                     if (addPaperInteractive()) {
+                        rebuildSearchIndexes();
                         std::cout << "当前共有 " << g_papers.length
                                   << " 篇论文。" << std::endl;
                     } else {
@@ -103,6 +109,7 @@ int main() {//主函数中可以自由添加局部变量、交互输入信息
                     }
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     if (deletePaperById(id)) {
+                        rebuildSearchIndexes();
                         std::cout << "当前共有 " << g_papers.length
                                   << " 篇论文。" << std::endl;
                     } else {
@@ -131,8 +138,21 @@ int main() {//主函数中可以自由添加局部变量、交互输入信息
             case 6: { // 按ID查找论文
                 if (dataLoaded) {
 
-                    //ToDo: 在此处调用按ID查找论文的功能函数
-                    std::cout << "按ID查找论文功能待实现，查找ID: " << std::endl;
+                    std::cout << "请输入要查找的论文 ID: ";
+                    std::string line;
+                    if (!std::getline(std::cin, line)) return 0;
+                    std::istringstream input(line);
+                    int id;
+                    if (!(input >> id) || !(input >> std::ws).eof()) {
+                        std::cout << "无效的 ID，请输入整数。" << std::endl;
+                        break;
+                    }
+                    const int paperIndex = searchHash(id);
+                    if (paperIndex == -1) {
+                        std::cout << "未找到 ID 为 " << id << " 的论文。" << std::endl;
+                    } else {
+                        displayPaperDetail(paperIndex);
+                    }
 
                 } else {
                     std::cout << "请先加载论文数据。" << std::endl;
