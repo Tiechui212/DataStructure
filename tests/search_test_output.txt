@@ -1,0 +1,13 @@
+=== BST title search + hash ID search tests ===
+[PASS] empty table returns not found
+成功加载 50 条论文记录。
+[PASS] loaded data matches linear search
+[PASS] missing title and ID return not found
+[PASS] hash collision keeps both IDs searchable
+BST：重复标题，保留第一条索引：Support-Vector Networks
+[PASS] duplicate title keeps the first paper index
+[PASS] search is correct after add
+[PASS] search is correct after delete
+成功加载 50 条论文记录。
+[PASS] search is correct after reload
+=== Result: 8 passed, 0 failed ===
