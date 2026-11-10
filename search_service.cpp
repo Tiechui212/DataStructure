@@ -1,4 +1,5 @@
 #include "search_service.h"
+#include "bst.h"
 #include "hash.h"
 #include "paper.h"
 
@@ -6,6 +7,7 @@
 
 void rebuildSearchIndexes() {
     buildHashFromPapers();
+    buildBSTFromPapers();
 }
 
 void displayPaperDetail(int paperIndex) {

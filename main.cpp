@@ -3,6 +3,7 @@
 #include <limits> // For numeric_limits
 #include <sstream>
 
+#include "bst.h"
 #include "editor.h"
 #include "loader.h"
 #include "paper.h"
@@ -161,9 +162,15 @@ int main() {//主函数中可以自由添加局部变量、交互输入信息
             }
             case 7: { // 按标题查找论文 (BST)
                 if (dataLoaded) {
-                    //ToDo: 在此处调用按标题查找论文的功能函数
-                    std::cout << "按标题查找论文功能待实现，查找标题: " << std::endl;
-
+                    std::cout << "请输入要查找的完整标题: ";
+                    std::string title;
+                    if (!std::getline(std::cin, title)) return 0;
+                    const int paperIndex = searchBST(title.c_str());
+                    if (paperIndex == -1) {
+                        std::cout << "未找到标题为 " << title << " 的论文。" << std::endl;
+                    } else {
+                        displayPaperDetail(paperIndex);
+                    }
                 } else {
                     std::cout << "请先加载论文数据。" << std::endl;
                 }
